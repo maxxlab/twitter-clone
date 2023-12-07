@@ -18,26 +18,37 @@ void main() {
 
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
-  
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final home = ref.watch(currentUserAccountProvider).when(
-          data: (user) {
-            if(user != null) {
-              return const HomeView();
-            }
-            return const SignUpView();
-          },
-          error: (error, st) => ErrorPage(
-            error: error.toString(),
-          ),
-          loading: () => const LoadingPage(),
-        );
+    // final home = ref.watch(currentUserAccountProvider).when(
+    //       data: (user) {
+    //         if(user != null) {
+    //           return const HomeView();
+    //         }
+    //         return const SignUpView();
+    //       },
+    //       error: (error, st) => ErrorPage(
+    //         error: error.toString(),
+    //       ),
+    //       loading: () => const LoadingPage(),
+    //     );
 
     return MaterialApp(
       title: 'Twitter Clone',
       theme: AppTheme.theme,
-      home: home,
+      home: ref.watch(currentUserAccountProvider).when(
+            data: (user) {
+              if (user != null) {
+                return const HomeView();
+              }
+              return const SignUpView();
+            },
+            error: (error, st) => ErrorPage(
+              error: error.toString(),
+            ),
+            loading: () => const LoadingPage(),
+          ),
     );
   }
 }
