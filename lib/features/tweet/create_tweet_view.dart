@@ -9,6 +9,7 @@ import 'package:twitter_clone/common/loading_page.dart';
 import 'package:twitter_clone/constants/assets_constants.dart';
 import 'package:twitter_clone/core/core.dart';
 import 'package:twitter_clone/features/auth/controller/auth_controller.dart';
+import 'package:twitter_clone/features/tweet/controller/tweet_controller.dart';
 import 'package:twitter_clone/theme/pallete.dart';
 
 class CreateTweetScreen extends ConsumerStatefulWidget {
@@ -29,6 +30,15 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
     Navigator.pop(context);
   }
 
+  void onShareTweet() {
+    ref.read(tweetControllerProvider.notifier).shareTweet(
+          images: images,
+          text: tweetTextController.text,
+          context: context,
+        );
+    closeCreateTweenSreen();
+  }
+
   void onPickImages() async {
     images = await pickImages();
     setState(() {});
@@ -43,6 +53,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
   @override
   Widget build(BuildContext context) {
     final currentUser = ref.watch(currentUserDetailsProvider).value;
+    final isLoading = ref.watch(tweetControllerProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -58,7 +69,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
           Padding(
             padding: const EdgeInsets.only(right: 13),
             child: RoundedSmallButton(
-              onTap: () {},
+              onTap: onShareTweet,
               label: 'Tweet',
               backgroundColor: Pallete.blueColor,
               textColor: Pallete.whiteColor,
@@ -66,7 +77,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
           ),
         ],
       ),
-      body: currentUser == null
+      body: isLoading || currentUser == null
           ? const Loader()
           : SafeArea(
               child: SingleChildScrollView(
@@ -105,15 +116,13 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
                       ),
                       if (images.isNotEmpty)
                         CarouselSlider(
-                          items:
-                              images.map((file) {
-                                return Container(
-                                  width: double.infinity,
-                                  margin: const EdgeInsets.symmetric(
-                                    horizontal: 5
-                                  ),
-                                  child: Image.file(file));
-                              }).toList(),
+                          items: images.map((file) {
+                            return Container(
+                                width: double.infinity,
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                child: Image.file(file));
+                          }).toList(),
                           options: CarouselOptions(
                             height: 400,
                             enableInfiniteScroll: false,
