@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:twitter_clone/constants/constants.dart';
+import 'package:twitter_clone/features/tweet/create_tweet_view.dart';
 import 'package:twitter_clone/theme/pallete.dart';
 
 class HomeView extends ConsumerStatefulWidget {
@@ -23,6 +24,13 @@ class _HomeViewState extends ConsumerState<HomeView> {
     });
   }
 
+  void onCreateTweet() {
+    Navigator.push(
+      context,
+      CreateTweetScreen.route(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,10 +41,11 @@ class _HomeViewState extends ConsumerState<HomeView> {
       ),
       floatingActionButton: FloatingActionButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-        onPressed: () {},
+        onPressed: onCreateTweet,
         child: const Icon(
           Icons.add,
           size: 30,
+          color: Pallete.whiteColor,
         ),
       ),
       bottomNavigationBar: CupertinoTabBar(

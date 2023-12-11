@@ -3,6 +3,11 @@ import 'package:twitter_clone/theme/pallete.dart';
 
 class AppTheme {
   static ThemeData theme = ThemeData.dark().copyWith(
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: Pallete.blueColor,
+      primary: Pallete.blueColor,
+      onPrimary: Pallete.whiteColor,
+    ),
     scaffoldBackgroundColor: Pallete.backgroundColor,
     appBarTheme: const AppBarTheme(
       backgroundColor: Pallete.backgroundColor,
