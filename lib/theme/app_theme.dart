@@ -12,6 +12,8 @@ class AppTheme {
     appBarTheme: const AppBarTheme(
       backgroundColor: Pallete.backgroundColor,
       elevation: 0,
+      foregroundColor: Pallete.whiteColor,
+      centerTitle: true
     ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: Pallete.blueColor,

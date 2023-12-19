@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:twitter_clone/constants/constants.dart';
-import 'package:twitter_clone/features/tweet/create_tweet_view.dart';
+import 'package:twitter_clone/features/tweet/view/create_tweet_view.dart';
 import 'package:twitter_clone/theme/pallete.dart';
 
 class HomeView extends ConsumerStatefulWidget {
