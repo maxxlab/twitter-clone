@@ -25,9 +25,19 @@ final getTweetsProvider = FutureProvider.autoDispose((ref) {
   return tweetController.getTweets();
 });
 
+final getRepliesToTweetsProvider = FutureProvider.family((ref, Tweet tweet) {
+  final tweetController = ref.watch(tweetControllerProvider.notifier);
+  return tweetController.getRepliesToTweet(tweet);
+});
+
 final getLatestTweetProvider = StreamProvider.autoDispose((ref) {
   final tweetAPI = ref.watch(tweetAPIProvider);
   return tweetAPI.getLatestTweet();
+});
+
+final getTweetByIdProvider = FutureProvider.family((ref, String id) async {
+  final tweetController = ref.watch(tweetControllerProvider.notifier);
+  return tweetController.getTweetById(id);
 });
 
 class TweetController extends StateNotifier<bool> {
@@ -52,6 +62,11 @@ class TweetController extends StateNotifier<bool> {
           ),
         )
         .toList();
+  }
+
+  Future<Tweet> getTweetById(String id) async {
+    final tweet = await _tweetAPI.getTweetById(id);
+    return Tweet.fromMap(tweet.data);
   }
 
   void shareTweet({
@@ -153,7 +168,7 @@ class TweetController extends StateNotifier<bool> {
       id: '',
       reshareCount: 0,
       retweetedBy: '',
-      repliedTo: '',
+      repliedTo: repliedTo,
     );
     final res = await _tweetAPI.shareTweet(tweet);
     state = false;
@@ -182,10 +197,21 @@ class TweetController extends StateNotifier<bool> {
       id: '',
       reshareCount: 0,
       retweetedBy: '',
-      repliedTo: '',
+      repliedTo: repliedTo,
     );
     final res = await _tweetAPI.shareTweet(tweet);
     state = false;
     res.fold((l) => showSnackBar(context, l.message), (r) => null);
+  }
+
+  Future<List<Tweet>> getRepliesToTweet(Tweet tweet) async {
+    final tweetList = await _tweetAPI.getRepliesToTweet(tweet);
+    return tweetList
+        .map(
+          (tweet) => Tweet.fromMap(
+            tweet.data,
+          ),
+        )
+        .toList();
   }
 }
