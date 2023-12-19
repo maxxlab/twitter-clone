@@ -20,18 +20,15 @@ class TweetList extends ConsumerWidget {
                         'databases.*.collections.${AppWriteConstants.tweetsCollectionId}.documents.*.create';
                     const isTweetUpdated =
                         'databases.*.collections.${AppWriteConstants.tweetsCollectionId}.documents.*.update';
-                    if (data.events.contains(
-                      isNewTweetCreated,
-                    )) {
+                    if (data.events.contains(isNewTweetCreated)) {
                       tweets.insert(0, Tweet.fromMap(data.payload));
-                    } else if (data.events.contains(
-                      isTweetUpdated,
-                    )) {
+                    } else if (data.events.contains(isTweetUpdated)) {
                       final stratingPoint =
                           data.events.first.lastIndexOf('documents.');
                       final endingPoint =
                           data.events.first.lastIndexOf('.update');
-                          final tweetId = data.events.first.substring(stratingPoint + 10, endingPoint);
+                      final tweetId = data.events.first
+                          .substring(stratingPoint + 10, endingPoint);
 
                       var tweet = tweets
                           .where((element) => element.id == tweetId)
@@ -72,7 +69,7 @@ class TweetList extends ConsumerWidget {
             // );
           },
           error: (error, stackTrace) => ErrorText(error: error.toString()),
-          loading: () => Loader(),
+          loading: () => const Loader(),
         );
   }
 }
